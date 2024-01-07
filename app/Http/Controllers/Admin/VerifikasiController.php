@@ -87,23 +87,13 @@ class VerifikasiController extends Controller
         try {
             $this->get_access_page();
             if ($this->create == 1) {
-                $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
-                    'ver_step' => 'required',
-                    'js_id' => 'required',
-                    'user_id' => 'required',
+                Verifikasi::create([
+                    'ver_step' => $request->input('ver_step'),
+                    'js_id' => $request->input('jenis'),
+                    'user_id' => $request->input('user_id'),
                 ]);
 
-                if (!$validate->fails()) {
-                    Verifikasi::create([
-                        'ver_step' => $request->input('ver_step'),
-                        'js_id' => $request->input('js_id'),
-                        'user_id' => $request->input('user_id'),
-                    ]);
-
-                    return redirect()->back()->with('success', 'Data Saved!');
-                } else {
-                    return redirect()->back()->with('failed', $validate->getMessageBag());
-                }
+                return redirect()->back()->with('success', 'Data Saved!');
             } else {
                 return redirect()->back()->with('failed', 'You not Have Authority!');
             }
@@ -136,23 +126,13 @@ class VerifikasiController extends Controller
         try {
             $this->get_access_page();
             if ($this->update == 1) {
-                $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
-                    'ver_step' => 'required',
-                    'js_id' => 'required',
-                    'user_id' => 'required',
+                Verifikasi::where('ver_id', $verifikasi->ver_id)->update([
+                    'ver_step' => $request->input('ver_step'),
+                    'js_id' => $request->input('jenis'),
+                    'user_id' => $request->input('user_id'),
                 ]);
 
-                if (!$validate->fails()) {
-                    Verifikasi::where('ver_id',$verifikasi->ver_id)->update([
-                        'ver_step' => $request->input('ver_step'),
-                        'js_id' => $request->input('js_id'),
-                        'user_id' => $request->input('user_id'),
-                    ]);
-
-                    return redirect()->back()->with('success', 'Data Updated!');
-                } else {
-                    return redirect()->back()->with('failed', $validate->getMessageBag());
-                }
+                return redirect()->back()->with('success', 'Data Updated!');
             } else {
                 return redirect()->back()->with('failed', 'You not Have Authority!');
             }

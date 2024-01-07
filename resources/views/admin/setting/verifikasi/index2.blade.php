@@ -83,6 +83,7 @@
                                 <tr>
                                     <form action="{{ route('verifikasi.store') }}" method="post">
                                         @csrf
+                                        <input type="hidden" name="jenis" value="{{ $selectJenis }}">
                                         <td>New Data</td>
                                         <td>
                                             <select id="jenis" name="js_id" class="form-control form-control-sm"
@@ -101,7 +102,7 @@
                                         <td>
                                             <select id="user" name="user_id" class="form-control form-control-sm">
                                                 @foreach ($user as $u)
-                                                    @if (old('user_id', $selectJenis) == $u->id)
+                                                    @if (old('user_id') == $u->id)
                                                         <option value="{{ $u->id }}" selected>{{ $u->name }}
                                                         </option>
                                                     @else
@@ -155,6 +156,7 @@
                                                             method="post">
                                                             @csrf
                                                             @method('put')
+                                                            <input type="hidden" name="jenis" value="{{ $selectJenis }}">
                                                             <div class="modal-body">
                                                                 <div class="form-group row">
                                                                     <div class="col-6">

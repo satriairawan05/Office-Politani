@@ -92,23 +92,13 @@ class SignatureController extends Controller
         try {
             $this->get_access_page();
             if ($this->create == 1) {
-                $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
-                    'sign_name' => 'required',
-                    'sign_nip' => 'required',
-                    'sign_jabatan' => 'required',
+                Signature::create([
+                    'sign_name' => $request->input('sign_name'),
+                    'sign_nip' => $request->input('sign_nip'),
+                    'sign_jabatan' => $request->input('sign_jabatan'),
                 ]);
 
-                if (!$validate->fails()) {
-                    Signature::create([
-                        'sign_name' => $request->input('sign_name'),
-                        'sign_nip' => $request->input('sign_nip'),
-                        'sign_jabatan' => $request->input('sign_jabatan'),
-                    ]);
-
-                    return redirect()->back()->with('success', 'Data Saved!');
-                } else {
-                    return redirect()->back()->with('failed', $validate->getMessageBag());
-                }
+                return redirect()->back()->with('success', 'Data Saved!');
             } else {
                 return redirect()->back()->with('failed', 'You not Have Authority!');
             }
@@ -141,30 +131,19 @@ class SignatureController extends Controller
         try {
             $this->get_access_page();
             if ($this->update == 1) {
-                $validate = \Illuminate\Support\Facades\Validator::make($request->all(), [
-                    'sign_name' => 'required',
-                    'sign_nip' => 'required',
-                    'sign_jabatan' => 'required',
+                Signature::where('sign_id', $signature->sign_id)->update([
+                    'sign_name' => $request->input('sign_name'),
+                    'sign_nip' => $request->input('sign_nip'),
+                    'sign_jabatan' => $request->input('sign_jabatan'),
                 ]);
 
-                if (!$validate->fails()) {
-                    Signature::where('sign_id',$signature->sign_id)->update([
-                        'sign_name' => $request->input('sign_name'),
-                        'sign_nip' => $request->input('sign_nip'),
-                        'sign_jabatan' => $request->input('sign_jabatan'),
-                    ]);
-
-                    return redirect()->back()->with('success', 'Data Updated!');
-                } else {
-                    return redirect()->back()->with('failed', $validate->getMessageBag());
-                }
+                return redirect()->back()->with('success', 'Data Updated!');
             } else {
                 return redirect()->back()->with('failed', 'You not Have Authority!');
             }
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect()->back()->with('failed', $e->getMessage());
         }
-
     }
 
     /**
