@@ -63,23 +63,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if($create == 1)
+                            @if ($create == 1)
                                 <tr>
                                     <form action="{{ route('signature.store') }}" method="post">
-                                    @csrf
+                                        @csrf
                                         <td>New Data</td>
+                                        <input type="hidden" name="prodi_id" value="{{ $prodi }}">
+                                        <input type="hidden" name="js_id" value="{{ $jenis }}">
                                         <td>
-                                        <input type="text" name="sign_name" id="sign_name" class="form-control" placeholder="Masukan Nama" value="{{ old('sign_name') }}">
+                                            <input type="text" name="sign_name" id="sign_name" class="form-control"
+                                                placeholder="Masukan Nama" value="{{ old('sign_name') }}">
                                         </td>
                                         <td>
-                                        <input type="text" name="sign_nip" id="sign_nip" class="form-control" placeholder="Masukan Nip" value="{{ old('sign_nip') }}">
+                                            <input type="text" name="sign_nip" id="sign_nip" class="form-control"
+                                                placeholder="Masukan Nip" value="{{ old('sign_nip') }}">
                                         </td>
                                         <td>
-                                        <input type="text" name="sign_jabatan" id="sign_jabatan" class="form-control" placeholder="Masukan Jabatan" value="{{ old('sign_jabatan') }}">
+                                            <input type="text" name="sign_jabatan" id="sign_jabatan" class="form-control"
+                                                placeholder="Masukan Jabatan" value="{{ old('sign_jabatan') }}">
                                         </td>
                                         <td>
                                             <button type="submit" class="btn btn-sm btn-success"><i
-                                                            class="fa fa-save"></i></button>
+                                                    class="fa fa-save"></i></button>
                                         </td>
                                     </form>
                                 </tr>
@@ -113,6 +118,10 @@
                                                             method="post">
                                                             @csrf
                                                             @method('put')
+                                                            <input type="hidden" name="prodi_id"
+                                                                value="{{ $prodi }}">
+                                                            <input type="hidden" name="js_id"
+                                                                value="{{ $jenis }}">
                                                             <div class="modal-body">
                                                                 <div class="form-group row">
                                                                     <div class="col-6">
@@ -123,9 +132,8 @@
                                                                             class="form-control form-control-sm @error('sign_name')
                                     is-invalid
                                 @enderror"
-                                                                            id="sign_name"
-                                                                            placeholder="Masukan Nama"
-                                                                            value="{{ old('sign_name',$sign->sign_name) }}"
+                                                                            id="sign_name" placeholder="Masukan Nama"
+                                                                            value="{{ old('sign_name', $sign->sign_name) }}"
                                                                             name="sign_name">
                                                                         @error('sign_name')
                                                                             <div class="invalid-feedback">
@@ -141,9 +149,8 @@
                                                                             class="form-control form-control-sm @error('sign_nip')
                                     is-invalid
                                 @enderror"
-                                                                            id="sign_nip"
-                                                                            placeholder="Masukan Nip"
-                                                                            value="{{ old('sign_nip',$sign->sign_nip) }}"
+                                                                            id="sign_nip" placeholder="Masukan Nip"
+                                                                            value="{{ old('sign_nip', $sign->sign_nip) }}"
                                                                             name="sign_nip">
                                                                         @error('sign_nip')
                                                                             <div class="invalid-feedback">
@@ -163,7 +170,7 @@
                                 @enderror"
                                                                             id="sign_jabatan"
                                                                             placeholder="Masukan Jabatan"
-                                                                            value="{{ old('sign_jabatan',$sign->sign_jabatan) }}"
+                                                                            value="{{ old('sign_jabatan', $sign->sign_jabatan) }}"
                                                                             name="sign_jabatan">
                                                                         @error('sign_jabatan')
                                                                             <div class="invalid-feedback">
@@ -185,8 +192,8 @@
                                             </div>
                                         @endif
                                         @if ($delete == 1)
-                                            <form action="{{ route('signature.destroy', $sign->sign_id) }}" method="post"
-                                                class="d-inline">
+                                            <form action="{{ route('signature.destroy', $sign->sign_id) }}"
+                                                method="post" class="d-inline">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-sm btn-danger"><i

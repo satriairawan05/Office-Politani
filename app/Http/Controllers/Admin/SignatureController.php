@@ -55,7 +55,9 @@ class SignatureController extends Controller
                 return view('admin.setting.signature.index3', [
                     'name' => $this->name,
                     'pages' => $this->get_access($this->name, auth()->user()->group_id),
-                    'signature' => Signature::where('prodi_id', request()->prodi_id)->where('js_id', request()->js_id)->get()
+                    'signature' => Signature::where('prodi_id', request()->prodi_id)->where('js_id', request()->js_id)->get(),
+                    'prodi' => request()->prodi_id,
+                    'jenis' => request()->js_id
                 ]);
             } else {
                 if (request()->prodi_id) {
@@ -93,6 +95,8 @@ class SignatureController extends Controller
             $this->get_access_page();
             if ($this->create == 1) {
                 Signature::create([
+                    'js_id' => $request->input('js_id'),
+                    'prodi_id' => $request->input('prodi_id'),
                     'sign_name' => $request->input('sign_name'),
                     'sign_nip' => $request->input('sign_nip'),
                     'sign_jabatan' => $request->input('sign_jabatan'),
@@ -132,6 +136,8 @@ class SignatureController extends Controller
             $this->get_access_page();
             if ($this->update == 1) {
                 Signature::where('sign_id', $signature->sign_id)->update([
+                    'js_id' => $request->input('js_id'),
+                    'prodi_id' => $request->input('prodi_id'),
                     'sign_name' => $request->input('sign_name'),
                     'sign_nip' => $request->input('sign_nip'),
                     'sign_jabatan' => $request->input('sign_jabatan'),
