@@ -208,7 +208,7 @@ class SuratKeluarController extends Controller
         try {
             $this->get_access_page();
             $verify = \App\Models\Verifikasi::where('js_id', $suratKeluar->js_id)->latest('ver_step')->first();
-            if ($this->verifikasi == 1 && $verify->ver_step == $suratKeluar->sk_step) {
+            if ($this->verifikasi == 1) {
                 $stepData = null;
                 $data = $suratKeluar->find(request()->segment(2));
 
