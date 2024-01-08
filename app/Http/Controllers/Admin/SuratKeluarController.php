@@ -55,10 +55,14 @@ class SuratKeluarController extends Controller
     {
         $this->get_access_page();
         if ($this->read == 1) {
+            $suratKeluar = SuratKeluar::leftJoin('jenis_surats', 'surat_keluars.js_id', '=', 'jenis_surats.js_id')
+                ->leftJoin('prodis', 'surat_keluars.prodi_id', '=', 'prodis.prodi_id')
+                ->latest('surat_keluars.created_at')
+                ->get();
             return view('admin.surat_keluar.index', [
                 'name' => $this->name,
                 'pages' =>  $this->get_access($this->name, auth()->user()->group_id),
-                'surat' => SuratKeluar::leftJoin('jenis_surats', 'surat_keluars.js_id', '=', 'jenis_surats.js_id')->leftJoin('prodis','surat_keluars.prodi_id','=','prodis.prodi_id')->latest('surat_keluars.js_id')->get()
+                'surat' => $suratKeluar
             ]);
         } else {
             return redirect()->back()->with('failed', 'You not Have Authority!');
@@ -125,7 +129,7 @@ class SuratKeluarController extends Controller
         if ($this->read == 1) {
             return view('admin.surat_keluar.show', [
                 'surat' => $suratKeluar->find(request()->segment(2)),
-                'signature' => \App\Models\Signature::where('js_id',$suratKeluar->js_id)->first()
+                'signature' => \App\Models\Signature::where('js_id', $suratKeluar->js_id)->first()
             ]);
         } else {
             return redirect()->back()->with('failed', 'You not Have Authority!');
@@ -203,18 +207,19 @@ class SuratKeluarController extends Controller
     {
         try {
             $this->get_access_page();
-            if($this->verifikasi == 1){
-                $data = $suratKeluar->find(request()->segment(2));
+            $verify = \App\Models\Verifikasi::where('js_id', $suratKeluar->js_id)->latest('ver_step')->first();
+            if ($this->verifikasi == 1 && $verify->ver_step == $suratKeluar->sk_step) {
                 $stepData = null;
+                $data = $suratKeluar->find(request()->segment(2));
 
-                if($request->input('sk_status') == 'Accepted'){
-                    $latestVer = \App\Models\Verifikasi::where('js_id',$data->js_id)->latest('ver_step')->first();
-                    if($latestVer->ver_step == $data->sk_step){
+                if ($request->input('sk_status') == 'Accepted') {
+                    $latestVer = \App\Models\Verifikasi::where('js_id', $data->js_id)->latest('ver_step')->first();
+                    if ($latestVer->ver_step == $data->sk_step) {
                         $stepData = $data->sk_step;
                     } else {
                         $stepData = $data->sk_step + 1;
                     }
-    
+
                     SuratKeluar::where('sk_id', $data->sk_id)->update([
                         'sk_status' => $request->input('sk_status'),
                         'sk_step' => $stepData

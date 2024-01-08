@@ -52,13 +52,22 @@ class HomeController extends Controller
                 'prodi' => \App\Models\Prodi::all()
             ]);
         } else {
-            $suratkeluar = \App\Models\SuratKeluar::where('prodi_id', request()->prodi_id)->get();
-            foreach ($suratkeluar as $surat) {
-                $verifikasi = \App\Models\Verifikasi::where('js_id', $surat->js_id)->latest()->get();
+            $suratKeluar = \App\Models\SuratKeluar::where('surat_keluars.prodi_id', request()->prodi_id)->where('surat_keluars.sk_status', 'Accepted')->get();
+            $latestVer = null;
+            foreach ($suratKeluar as $surat) {
+                $verifikasi = \App\Models\Verifikasi::where('js_id', $surat->js_id)->latest('ver_step')->first();
+                if ($verifikasi != null) {
+                    $latestVer = $verifikasi->ver_step;
+                }
             }
             return view('admin.archive.archive', [
                 'name' => 'Archive',
-                'surat' => \App\Models\SuratKeluar::where('prodi_id', request()->prodi_id)->where('sk_step', $verifikasi->ver_step)->where('sk_status', 'Accepted')->latest()->get(),
+                'surat' => \App\Models\SuratKeluar::leftJoin('jenis_surats', 'surat_keluars.js_id', '=', 'jenis_surats.js_id')
+                    ->where('surat_keluars.prodi_id', request()->prodi_id)
+                    ->where('surat_keluars.sk_step', $latestVer)
+                    ->where('surat_keluars.sk_status', 'Accepted')
+                    ->latest('surat_keluars.created_at')
+                    ->get(),
             ]);
         }
     }

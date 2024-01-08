@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('sk_tgl')->nullable();
             $table->integer('sk_step')->default(1)->nullable();
             $table->string('sk_status')->nullable();
-            $table->string('sk_verifikasi')->nullable();
+            // $table->string('sk_verifikasi')->nullable();
             $table->timestamps();
         });
     }
