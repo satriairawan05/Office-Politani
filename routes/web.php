@@ -17,6 +17,10 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
+Route::get('/clear',function(){
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+});
+
 // Login & Logout
 Route::get('login', [\App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [\App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login_store');
