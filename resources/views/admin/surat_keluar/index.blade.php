@@ -129,6 +129,7 @@
                                 <th>Program Studi</th>
                                 <th>Perihal</th>
                                 <th>Tanggal</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -140,6 +141,7 @@
                                     <td>{{ $s->prodi_name }}</td>
                                     <td>{{ $s->sk_perihal }}</td>
                                     <td>{{ \Carbon\Carbon::parse($s->sk_tgl)->isoFormat('DD MMMM YYYY') }}</td>
+                                    <td>{{ $s->sk_status ?? 'surat baru' }}</td>
                                     <td>
                                         <button onclick="return printDoc({{ $s->sk_id }})" {{-- href="{{ route('surat_keluar.show', $s->sk_id) }}" --}}
                                             class="btn btn-sm btn-info" target="__blank"><i
