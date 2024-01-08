@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'name' => 'Super admin',
             'email' => 'admin@politanisamarinda.ac.id',
             'email_verified_at' => now(),
-            'password' => bcrypt('admin123'),
+            'password' => bcrypt('admin123'), //password
             'remember_token' => \Illuminate\Support\Str::random(10),
             'login_as' => 'admin',
             'group_id' => 1,

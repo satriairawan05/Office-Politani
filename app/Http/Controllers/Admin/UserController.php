@@ -109,6 +109,9 @@ class UserController extends Controller
                     User::create([
                         'name' => $request->input('name'),
                         'email' => $request->input('email'),
+                        'login_as' => $request->input('login_as'),
+                        'nomor_induk' => $request->input('nomor_induk'),
+                        'group_id' => $request->input('group_id'),
                         'password' => bcrypt($request->input('password')),
                     ]);
 
@@ -171,6 +174,9 @@ class UserController extends Controller
                     User::where('id', $user->id)->update([
                         'name' => $request->input('name'),
                         'email' => $request->input('email'),
+                        'login_as' => $request->input('login_as'),
+                        'nomor_induk' => $request->input('nomor_induk'),
+                        'group_id' => $request->input('group_id'),
                         'password' => bcrypt($request->input('password')),
                     ]);
 

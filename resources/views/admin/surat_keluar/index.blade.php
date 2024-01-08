@@ -147,7 +147,7 @@
                                         @php
                                             $verify = \App\Models\Verifikasi::where('js_id',$s->js_id)->latest('ver_step')->first();
                                         @endphp
-                                        @if ($verifikasi == 1 && $verify->ver_step == $s->sk_step)
+                                        @if ($verifikasi == 1)
                                             <button type="button" data-toggle="modal"
                                                 data-target="#exampleModal{{ $s->sk_id }}"
                                                 class="btn btn-sm btn-secondary"><i class="ti ti-pencil"></i></button>
