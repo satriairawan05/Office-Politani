@@ -68,6 +68,7 @@ class HomeController extends Controller
                     ->where('surat_keluars.sk_status', 'Accepted')
                     ->latest('surat_keluars.created_at')
                     ->get(),
+                'prodi' => \App\Models\Prodi::where('prodi_id',request()->prodi_id)->first()
             ]);
         }
     }

@@ -32,7 +32,7 @@
                 <li class="breadcrumb-item">
                     <a href="{{ route('home') }}"> <i class="fa fa-home"></i> </a>
                 </li>
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ $name }}</a>
+                <li class="breadcrumb-item"><a href="{{ route('surat_keluar.index') }}">{{ $name }}</a>
                 <li class="breadcrumb-item">Create
                 </li>
             </ul>

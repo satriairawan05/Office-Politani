@@ -67,7 +67,10 @@
                 <li class="breadcrumb-item">
                     <a href="{{ route('home') }}"> <i class="fa fa-home"></i> </a>
                 </li>
-                <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ $name }}</a>
+                <li class="breadcrumb-item"><a href="{{ route('archive') }}">{{ $name }}</a>
+                </li>
+                <li class="breadcrumb-item"><a
+                        href="{{ route('archive', ['prodi_id' => $prodi->prodi_id]) }}">{{ $prodi->prodi_name }}</a>
                 </li>
             </ul>
         </div>
@@ -79,31 +82,30 @@
         <div class="card col-12">
             <div class="card-body">
                 <table class="table-responsive table">
-                        <thead class="table-primary table-hover text-white">
+                    <thead class="table-primary table-hover text-white">
+                        <tr>
+                            <th>No</th>
+                            <th>Jenis Surat</th>
+                            <th>Perihal</th>
+                            <th>Tanggal</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($surat as $s)
                             <tr>
-                                <th>No</th>
-                                <th>Jenis Surat</th>
-                                <th>Perihal</th>
-                                <th>Tanggal</th>
-                                <th>Action</th>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $s->js_name }}</td>
+                                <td>{{ $s->sk_perihal }}</td>
+                                <td>{{ \Carbon\Carbon::parse($s->sk_tgl)->isoFormat('DD MMMM YYYY') }}</td>
+                                <td>
+                                    <button onclick="return printDoc({{ $s->sk_id }})" {{-- href="{{ route('surat_keluar.show', $s->sk_id) }}" --}}
+                                        class="btn btn-sm btn-info" target="__blank"><i class="fa fa-print"></i></button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($surat as $s)
-                                <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $s->js_name }}</td>
-                                    <td>{{ $s->sk_perihal }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($s->sk_tgl)->isoFormat('DD MMMM YYYY') }}</td>
-                                    <td>
-                                        <button onclick="return printDoc({{ $s->sk_id }})" {{-- href="{{ route('surat_keluar.show', $s->sk_id) }}" --}}
-                                            class="btn btn-sm btn-info" target="__blank"><i
-                                                class="fa fa-print"></i></button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
