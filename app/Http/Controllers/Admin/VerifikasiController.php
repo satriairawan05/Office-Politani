@@ -51,20 +51,29 @@ class VerifikasiController extends Controller
     {
         $this->get_access_page();
         if ($this->read == 1) {
-            if (!request()->js_id) {
-                return view('admin.setting.verifikasi.index', [
-                    'name' => $this->name,
-                    'jenis' => \App\Models\JenisSurat::all()
-                ]);
-            } else {
-                return view('admin.setting.verifikasi.index2', [
+            if (request()->prodi_id && request()->js_id) {
+                return view('admin.setting.verifikasi.index3', [
                     'name' => $this->name,
                     'pages' => $this->get_access($this->name, auth()->user()->group_id),
-                    'verifikasi' => Verifikasi::where('js_id', request()->js_id)->get(),
+                    'verifikasi' => Verifikasi::where('prodi_id', request()->prodi_id)->where('js_id', request()->js_id)->get(),
                     'jenis' => \App\Models\JenisSurat::all(),
                     'user' => \App\Models\User::all(),
-                    'selectJenis' => request()->js_id
+                    'selectJenis' => request()->js_id,
+                    'selectProdi' => request()->prodi_id
                 ]);
+            } else {
+                if (request()->prodi_id) {
+                    return view('admin.setting.signature.index2', [
+                        'name' => $this->name,
+                        'prodi' => \App\Models\Prodi::where('prodi_id', request()->prodi_id)->first(),
+                        'jenis' => \App\Models\JenisSurat::all()
+                    ]);
+                } else {
+                    return view('admin.setting.verifikasi.index', [
+                        'name' => $this->name,
+                        'prodi' => \App\Models\Prodi::all(),
+                    ]);
+                }
             }
         } else {
             return redirect()->back()->with('failed', 'You not Have Authority!');
@@ -90,6 +99,7 @@ class VerifikasiController extends Controller
                 Verifikasi::create([
                     'ver_step' => $request->input('ver_step'),
                     'js_id' => $request->input('jenis'),
+                    'prodi_id' => $request->input('prodi'),
                     'user_id' => $request->input('user_id'),
                 ]);
 
@@ -129,6 +139,7 @@ class VerifikasiController extends Controller
                 Verifikasi::where('ver_id', $verifikasi->ver_id)->update([
                     'ver_step' => $request->input('ver_step'),
                     'js_id' => $request->input('jenis'),
+                    'prodi_id' => $request->input('prodi'),
                     'user_id' => $request->input('user_id'),
                 ]);
 

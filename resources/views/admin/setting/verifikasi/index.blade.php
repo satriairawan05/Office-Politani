@@ -13,7 +13,7 @@
                 <li class="breadcrumb-item">
                     <a href="{{ route('home') }}"> <i class="fa fa-home"></i> </a>
                 </li>
-                <li class="breadcrumb-item"><a href="{{ route('verifikasi.index') }}">{{ $name }}</a>
+                <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ $name }}</a>
                 </li>
             </ul>
         </div>
@@ -25,8 +25,8 @@
         <div class="card col-12">
             <div class="card-body">
                 <ul class="list-group">
-                    @foreach ($jenis as $j)
-                    <li class="list-group-item"><a href="?js_id={{ $j->js_id }}">{{ $j->js_name }}</a></li>
+                    @foreach ($prodi as $p)
+                    <li class="list-group-item"><a href="?prodi_id={{ $p->prodi_id }}">{{ $p->prodi_name }}</a></li>
                     @endforeach
                 </ul>
             </div>
