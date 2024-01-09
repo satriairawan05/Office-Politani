@@ -143,13 +143,17 @@
                                     <td>{{ \Carbon\Carbon::parse($s->sk_tgl)->isoFormat('DD MMMM YYYY') }}</td>
                                     <td>{{ $s->sk_status ?? 'surat baru' }}</td>
                                     <td>
-                                        <button onclick="return printDoc({{ $s->sk_id }})" {{-- href="{{ route('surat_keluar.show', $s->sk_id) }}" --}}
-                                            class="btn btn-sm btn-info" target="__blank"><i
-                                                class="fa fa-print"></i></button>
+                                        @if ($s->sk_status != 'Rejected')
+                                            <button onclick="return printDoc({{ $s->sk_id }})" {{-- href="{{ route('surat_keluar.show', $s->sk_id) }}" --}}
+                                                class="btn btn-sm btn-info" target="__blank"><i
+                                                    class="fa fa-print"></i></button>
+                                        @endif
                                         @php
-                                            $verify = \App\Models\Verifikasi::where('js_id',$s->js_id)->latest('created_at')->first();
+                                            $verify = \App\Models\Verifikasi::where('js_id', $s->js_id)
+                                                ->latest('created_at')
+                                                ->first();
                                         @endphp
-                                        @if ($verifikasi == 1 && $verify->ver_step == $s->sk_step)
+                                        @if ($verifikasi == 1 && $verify->ver_step == $s->sk_step && $verify->ver_status == null)
                                             <button type="button" data-toggle="modal"
                                                 data-target="#exampleModal{{ $s->sk_id }}"
                                                 class="btn btn-sm btn-secondary"><i class="ti ti-pencil"></i></button>
@@ -173,25 +177,23 @@
                                                             @method('put')
                                                             <div class="modal-body">
                                                                 <div class="form-group row mt-3">
-                                                                    <div class="col-12">
-                                                                        @php
-                                                                            $status = ['Accepted', 'Rejected'];
-                                                                        @endphp
-                                                                        <select id="status" name="sk_status"
-                                                                            class="form-control form-control-sm">
-                                                                            @foreach ($status as $sta)
-                                                                                @if (old('sk_status') == $sta)
-                                                                                    <option value="{{ $sta }}"
-                                                                                        selected>{{ $sta }}
-                                                                                    </option>
-                                                                                @else
-                                                                                    <option value="{{ $sta }}">
-                                                                                        {{ $sta }}
-                                                                                    </option>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </select>
-                                                                    </div>
+                                                                    @php
+                                                                        $status = ['Accepted', 'Rejected'];
+                                                                    @endphp
+                                                                    <select id="status" name="sk_status"
+                                                                        class="form-control form-control-sm">
+                                                                        @foreach ($status as $sta)
+                                                                            @if (old('sk_status') == $sta)
+                                                                                <option value="{{ $sta }}"
+                                                                                    selected>{{ $sta }}
+                                                                                </option>
+                                                                            @else
+                                                                                <option value="{{ $sta }}">
+                                                                                    {{ $sta }}
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">

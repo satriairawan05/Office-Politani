@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('js_id')->nullable();
             $table->foreignId('user_id')->nullable();
             $table->integer('ver_step')->nullable();
+            $table->string('ver_status')->nullable();
             $table->timestamps();
         });
     }

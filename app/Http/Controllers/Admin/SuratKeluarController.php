@@ -126,7 +126,7 @@ class SuratKeluarController extends Controller
     public function show(SuratKeluar $suratKeluar)
     {
         $this->get_access_page();
-        if ($this->read == 1) {
+        if ($this->read == 1 && $suratKeluar->sk_status != 'Rejected') {
             return view('admin.surat_keluar.show', [
                 'surat' => $suratKeluar->find(request()->segment(2)),
                 'signature' => \App\Models\Signature::where('js_id', $suratKeluar->js_id)->first()
@@ -208,7 +208,7 @@ class SuratKeluarController extends Controller
         try {
             $this->get_access_page();
             $verify = \App\Models\Verifikasi::where('js_id', $suratKeluar->js_id)->latest('ver_step')->first();
-            if ($this->verifikasi == 1 && $verify->ver_step == $suratKeluar->sk_step) {
+            if ($this->verifikasi == 1 && $verify->ver_step == $suratKeluar->sk_step && $verify->ver_status == null) {
                 $stepData = null;
                 $data = $suratKeluar->find(request()->segment(2));
 
@@ -221,18 +221,22 @@ class SuratKeluarController extends Controller
                     }
 
                     SuratKeluar::where('sk_id', $data->sk_id)->update([
-                        'sk_status' => $request->input('sk_status'),
+                        'sk_status' => $request->input('sk_status') . 'by ' . auth()->user()->name,
                         'sk_step' => $stepData
                     ]);
                 } else {
                     $stepData = 1;
                     SuratKeluar::where('sk_id', $data->sk_id)->update([
-                        'sk_status' => $request->input('sk_status'),
+                        'sk_status' => $request->input('sk_status') . 'by ' . auth()->user()->name,
                         'sk_step' => $stepData
                     ]);
                 }
 
-                return redirect()->back()->with('success', 'Data Updated!');
+                \App\Models\Verifikasi::where('user_id',auth()->user()->id)->update([
+                    'ver_status' => $request->input('sk_status')
+                ]);
+
+                return redirect()->back()->with('success', 'Data ' . $data->sk_perihal . ' Updated!');
             } else {
                 return redirect()->back()->with('failed', 'You not Have Authority!');
             }
