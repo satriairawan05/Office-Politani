@@ -133,7 +133,7 @@
                                     @endphp
                                     <td>{{ $jenisSurat->js_name }}</td>
                                     <td>{{ $userVer->name }}</td>
-                                    <td>1</td>
+                                    <td>{{ $ver->ver_step }}</td>
                                     <td>
                                         @if ($update == 1)
                                             <button type="button" data-toggle="modal"
